@@ -31,5 +31,16 @@ namespace CanvasImplementation.ViewModels
                 _image.FillParent();
             }
         }
+
+        public void SetAngle(float angle)
+        {
+            transform.rotation = Quaternion.identity;
+            transform.Rotate(Vector3.forward, angle);
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            transform.position = position;
+        }
     }
 }
