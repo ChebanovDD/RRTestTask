@@ -11,7 +11,7 @@ namespace Core
         
         public void AddCard()
         {
-            _cardStack.AddCard(_card.CreateNew<ICard>(_cardStack.Container));
+            _cardStack.AddCard(_card.CreateNew<ICard>());
         }
     }
 }

@@ -35,12 +35,17 @@ namespace CanvasImplementation.ViewModels
         public void SetAngle(float angle)
         {
             transform.rotation = Quaternion.identity;
-            transform.Rotate(Vector3.forward, angle);
+            transform.Rotate(Vector3.back, angle);
         }
 
         public void SetPosition(Vector3 position)
         {
             transform.position = position;
+        }
+
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent, false);
         }
     }
 }

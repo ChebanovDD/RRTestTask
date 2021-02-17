@@ -8,5 +8,6 @@ namespace Core.Interfaces
         void SetModel(CardModel model);
         void SetAngle(float angle);
         void SetPosition(Vector3 position);
+        void SetParent(Transform parent);
     }
 }

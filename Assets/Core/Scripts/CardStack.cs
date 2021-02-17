@@ -16,15 +16,20 @@ namespace Core
         [SerializeField] private Transform _container;
 
         private readonly List<ICard> _cards = new List<ICard>();
-
-        public Transform Container => _container;
-
+        
         public void AddCard(ICard card)
         {
+            if (card == null)
+            {
+                throw new NullReferenceException("Card can not be null.");
+            }
+
             if (_cards.Contains(card))
             {
                 throw new InvalidOperationException("Can not add the same card twiñe.");
             }
+
+            card.SetParent(_container.transform);
 
             _cards.Add(card);
             RecalculateTransforms();
@@ -39,17 +44,17 @@ namespace Core
 
             var count = _cards.Count;
             var isEven = count % 2 == 0;
-            var startAngle = isEven ? -_spacing / 2 * (count - 1) : -_spacing * ((count - 1) / 2);
+            var angle = isEven ? -_spacing / 2 * (count - 1) : -_spacing * ((count - 1) / 2);
 
             foreach (var card in _cards)
             {
-                var x = Mathf.Sin(startAngle * Mathf.Deg2Rad) * _radius + _container.position.x;
-                var y = Mathf.Cos(startAngle * Mathf.Deg2Rad) * _radius + _container.position.y;
+                var x = Mathf.Sin(angle * Mathf.Deg2Rad) * _radius + _container.position.x;
+                var y = Mathf.Cos(angle * Mathf.Deg2Rad) * _radius + _container.position.y;
 
-                card.SetAngle(-startAngle);
+                card.SetAngle(angle);
                 card.SetPosition(new Vector3(x, y - _radius + _verticalOffset));
 
-                startAngle += _spacing;
+                angle += _spacing;
             }
         }
     }
