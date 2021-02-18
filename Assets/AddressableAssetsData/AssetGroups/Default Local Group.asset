@@ -18,42 +18,42 @@ MonoBehaviour:
   m_GUID: 814f3b95459d6fb48a420e8c31c23941
   m_SerializeEntries:
   - m_GUID: d2b25842feca88342af532872e8be392
-    m_Address: Assets/CanvasImplementation/Cards/Oondasta.asset
+    m_Address: Oondasta
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
     m_MainAsset: {fileID: 11400000, guid: d2b25842feca88342af532872e8be392, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: d2b25842feca88342af532872e8be392, type: 2}
   - m_GUID: 20370a5d69ad041479ebc5fcaccecdfc
-    m_Address: Assets/CanvasImplementation/Cards/GennGreymane.asset
+    m_Address: GennGreymane
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
     m_MainAsset: {fileID: 11400000, guid: 20370a5d69ad041479ebc5fcaccecdfc, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: 20370a5d69ad041479ebc5fcaccecdfc, type: 2}
   - m_GUID: e1c91a89b19e5744fa2abdab13d4859c
-    m_Address: Assets/CanvasImplementation/Cards/CoffinCrasher.asset
+    m_Address: CoffinCrasher
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
     m_MainAsset: {fileID: 11400000, guid: e1c91a89b19e5744fa2abdab13d4859c, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: e1c91a89b19e5744fa2abdab13d4859c, type: 2}
   - m_GUID: 4ee9bdb9f8dd13a4494a1a1263e70165
-    m_Address: Assets/CanvasImplementation/Cards/BraveMurloc.asset
+    m_Address: BraveMurloc
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
     m_MainAsset: {fileID: 11400000, guid: 4ee9bdb9f8dd13a4494a1a1263e70165, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: 4ee9bdb9f8dd13a4494a1a1263e70165, type: 2}
   - m_GUID: 1218d022f720b4740ad4fe93721247ac
-    m_Address: Assets/CanvasImplementation/Cards/Aeranas.asset
+    m_Address: Aeranas
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
     m_MainAsset: {fileID: 11400000, guid: 1218d022f720b4740ad4fe93721247ac, type: 2}
     m_TargetAsset: {fileID: 11400000, guid: 1218d022f720b4740ad4fe93721247ac, type: 2}
   - m_GUID: 58782988a2fbfa94f8f19179adc3b5b9
-    m_Address: Assets/CanvasImplementation/Cards/ProphetVelen.asset
+    m_Address: ProphetVelen
     m_ReadOnly: 0
     m_SerializedLabels:
     - Cards
