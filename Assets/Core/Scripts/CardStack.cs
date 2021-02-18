@@ -16,7 +16,9 @@ namespace Core
         [SerializeField] private Transform _container;
 
         private readonly List<ICard> _cards = new List<ICard>();
-        
+
+        public int Count => _cards.Count;
+
         public void AddCard(ICard card)
         {
             if (card == null)
@@ -33,6 +35,16 @@ namespace Core
 
             _cards.Add(card);
             RecalculateTransforms();
+        }
+
+        public ICard GetCard(int index)
+        {
+            if (index >= 0 && index < _cards.Count)
+            {
+                return _cards[index];
+            }
+
+            throw new IndexOutOfRangeException();
         }
 
         public void RecalculateTransforms()

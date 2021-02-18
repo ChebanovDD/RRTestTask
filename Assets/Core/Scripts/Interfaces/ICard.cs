@@ -1,11 +1,12 @@
-using Core.Models;
+using Core.ScriptableObjects;
 using UnityEngine;
 
 namespace Core.Interfaces
 {
     public interface ICard
     {
-        void SetModel(CardModel model);
+        void SetData(CardData data);
+        void SetMana(int value);
         void SetAngle(float angle);
         void SetPosition(Vector3 position);
         void SetParent(Transform parent);

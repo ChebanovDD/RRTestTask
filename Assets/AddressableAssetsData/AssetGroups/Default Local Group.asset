@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 814f3b95459d6fb48a420e8c31c23941
+  m_SerializeEntries:
+  - m_GUID: d2b25842feca88342af532872e8be392
+    m_Address: Assets/CanvasImplementation/Cards/Oondasta.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: d2b25842feca88342af532872e8be392, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: d2b25842feca88342af532872e8be392, type: 2}
+  - m_GUID: 20370a5d69ad041479ebc5fcaccecdfc
+    m_Address: Assets/CanvasImplementation/Cards/GennGreymane.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: 20370a5d69ad041479ebc5fcaccecdfc, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: 20370a5d69ad041479ebc5fcaccecdfc, type: 2}
+  - m_GUID: e1c91a89b19e5744fa2abdab13d4859c
+    m_Address: Assets/CanvasImplementation/Cards/CoffinCrasher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: e1c91a89b19e5744fa2abdab13d4859c, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: e1c91a89b19e5744fa2abdab13d4859c, type: 2}
+  - m_GUID: 4ee9bdb9f8dd13a4494a1a1263e70165
+    m_Address: Assets/CanvasImplementation/Cards/BraveMurloc.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: 4ee9bdb9f8dd13a4494a1a1263e70165, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: 4ee9bdb9f8dd13a4494a1a1263e70165, type: 2}
+  - m_GUID: 1218d022f720b4740ad4fe93721247ac
+    m_Address: Assets/CanvasImplementation/Cards/Aeranas.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: 1218d022f720b4740ad4fe93721247ac, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: 1218d022f720b4740ad4fe93721247ac, type: 2}
+  - m_GUID: 58782988a2fbfa94f8f19179adc3b5b9
+    m_Address: Assets/CanvasImplementation/Cards/ProphetVelen.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Cards
+    m_MainAsset: {fileID: 11400000, guid: 58782988a2fbfa94f8f19179adc3b5b9, type: 2}
+    m_TargetAsset: {fileID: 11400000, guid: 58782988a2fbfa94f8f19179adc3b5b9, type: 2}
+  - m_GUID: f7122fca58316bf4093983db83afa038
+    m_Address: Card
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 7746166977741275309, guid: f7122fca58316bf4093983db83afa038, type: 3}
+    m_TargetAsset: {fileID: 7746166977741275309, guid: f7122fca58316bf4093983db83afa038, type: 3}
+  - m_GUID: bc54d83421d57d74ba63a91491632979
+    m_Address: IncreaseNumberImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 3384838168741576943, guid: bc54d83421d57d74ba63a91491632979, type: 3}
+    m_TargetAsset: {fileID: 3384838168741576943, guid: bc54d83421d57d74ba63a91491632979, type: 3}
+  - m_GUID: 43a4cf3dabbe40b45bde9d21cf26a36d
+    m_Address: DecreaseNumberImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 1338147993896316779, guid: 43a4cf3dabbe40b45bde9d21cf26a36d, type: 3}
+    m_TargetAsset: {fileID: 1338147993896316779, guid: 43a4cf3dabbe40b45bde9d21cf26a36d, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8052424f5129e3345992cd8bbe1d6099, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c9d5970d0cff0134abf85f6a8b041c58, type: 2}
+    - {fileID: 11400000, guid: 81cbf621e701cf244af9e99d51aa5e4f, type: 2}

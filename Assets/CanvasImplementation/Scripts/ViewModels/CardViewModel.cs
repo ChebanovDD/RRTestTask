@@ -1,6 +1,7 @@
+using CanvasImplementation.BaseElements;
 using Core.Extensions;
 using Core.Interfaces;
-using Core.Models;
+using Core.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,27 +10,29 @@ namespace CanvasImplementation.ViewModels
 {
     public class CardViewModel : MonoBehaviour, ICard
     {
-        [SerializeField] private TMP_Text _manaLabel;
-        [SerializeField] private TMP_Text _attackLabel;
-        [SerializeField] private TMP_Text _healthLabel;
+        [SerializeField] private AnimatedNumberLabel _manaLabel;
+        [SerializeField] private AnimatedNumberLabel _attackLabel;
+        [SerializeField] private AnimatedNumberLabel _healthLabel;
         [SerializeField] private TMP_Text _nameLabel;
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
 
-        public void SetModel(CardModel model)
+        public void SetData(CardData data)
         {
-            _manaLabel.text = model.Mana.ToString();
-            _attackLabel.text = model.Attack.ToString();
-            _healthLabel.text = model.Health.ToString();
-            
-            _nameLabel.text = model.Name;
-            _descriptionLabel.text = model.Description;
+            _manaLabel.SetValueWithoutAnimation(data.Mana);
+            _attackLabel.SetValueWithoutAnimation(data.Attack);
+            _healthLabel.SetValueWithoutAnimation(data.Health);
 
-            if (model.Image != null)
-            {
-                _image.texture = model.Image;
-                _image.FillParent();
-            }
+            _nameLabel.text = data.Name;
+            _descriptionLabel.text = data.Description;
+
+            _image.texture = data.Image;
+            _image.FillParent();
+        }
+        
+        public void SetMana(int value)
+        {
+            _manaLabel.SetValue(value);
         }
 
         public void SetAngle(float angle)
