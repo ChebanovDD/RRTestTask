@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using Core.Extensions;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace CanvasImplementation.BaseElements
 {
@@ -15,13 +15,16 @@ namespace CanvasImplementation.BaseElements
         [SerializeField] private float _delay;
         [SerializeField] private float _duration;
         [SerializeField] private Ease _easeType;
+        [SerializeField] private Transform _spawnPoint;
 
         [Header("Prefabs")]
-        [SerializeField] private GameObject _increaseSpritePrefab;
-        [SerializeField] private GameObject _decreaseSpritePrefab;
+        [SerializeField] private AssetReference _increaseAssetReference;
+        [SerializeField] private AssetReference _decreaseAssetReference;
 
         private int _value;
         private int _previousValue;
+
+        public int Value => _value;
 
         private void Awake()
         {
@@ -73,13 +76,21 @@ namespace CanvasImplementation.BaseElements
             {
                 if (isDecreaseMode)
                 {
-                    UpdateValue(_previousValue - 1);
-                    AnimateNumber(_decreaseSpritePrefab.CreateNew());
+                    _decreaseAssetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform)
+                        .Completed += handle =>
+                    {
+                        UpdateValue(_previousValue - 1);
+                        AnimateNumber(handle.Result);
+                    };
                 }
                 else
                 {
-                    UpdateValue(_previousValue + 1);
-                    AnimateNumber(_increaseSpritePrefab.CreateNew());
+                    _increaseAssetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform)
+                        .Completed += handle =>
+                    {
+                        UpdateValue(_previousValue + 1);
+                        AnimateNumber(handle.Result);
+                    };
                 }
 
                 yield return new WaitForSeconds(_delay);
@@ -94,9 +105,6 @@ namespace CanvasImplementation.BaseElements
 
         private void AnimateNumber(GameObject numberObject)
         {
-            numberObject.transform.SetParent(transform);
-            numberObject.transform.position = new Vector3(transform.position.x, transform.position.y + 25);
-
             DOTween.Sequence()
                 .Append(numberObject.transform.DOMoveY(numberObject.transform.position.y + 250, _duration))
                 .Append(numberObject.transform.DOScale(0, _duration / 4))
