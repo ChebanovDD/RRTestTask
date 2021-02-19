@@ -12,8 +12,7 @@ namespace Core.Interfaces
         Vector3 StackPosition { get; }
         Quaternion StackRotation { get; }
 
-        event EventHandler<int> HealthChanged;
-        event EventHandler<int> StatusValueChanged;
+        event EventHandler<CardStatus> StatusValueChanged;
 
         void SetData(CardData data);
         bool SetStatusValue(int index, int value);

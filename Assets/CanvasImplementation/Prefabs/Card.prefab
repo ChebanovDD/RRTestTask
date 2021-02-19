@@ -422,6 +422,10 @@ PrefabInstance:
       value: HealthLabel
       objectReference: {fileID: 0}
     - target: {fileID: 6958933736121353172, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
+      propertyPath: _status
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958933736121353172, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
       propertyPath: _pathLength
       value: 500
       objectReference: {fileID: 0}
@@ -546,6 +550,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ManaLabel
       objectReference: {fileID: 0}
+    - target: {fileID: 6958933736121353172, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
+      propertyPath: _status
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7268709337860036448, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -658,6 +666,10 @@ PrefabInstance:
     - target: {fileID: 1189407535282202262, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
       propertyPath: m_Name
       value: AttackLabel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6958933736121353172, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
+      propertyPath: _status
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6958933736121353172, guid: b3812fcf83016154f98957e4c9f786f7, type: 3}
       propertyPath: _pathLength

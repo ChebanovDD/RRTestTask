@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CanvasImplementation.BaseElements;
+using Core;
 using Core.Extensions;
 using Core.Interfaces;
 using Core.Models;
@@ -20,27 +21,23 @@ namespace CanvasImplementation.ViewModels
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
 
-        private List<AnimatedNumberLabel> _cardStatuses;
+        private List<CardStatus> _cardStatuses;
 
         public int StatusCount => _cardStatuses.Count;
         public GameObject GameObject => gameObject;
         public Vector3 StackPosition { get; private set; }
         public Quaternion StackRotation { get; private set; }
 
-        public event EventHandler<int> HealthChanged;
-        public event EventHandler<int> StatusValueChanged;
+        public event EventHandler<CardStatus> StatusValueChanged;
 
         private void Awake()
         {
-            _cardStatuses = new List<AnimatedNumberLabel>
+            _cardStatuses = new List<CardStatus>
             {
                 _manaLabel,
                 _attackLabel,
                 _healthLabel
             };
-
-            _healthLabel.MinValue = 0;
-            _healthLabel.ValueChanged += OnHealthValueChanged;
 
             foreach (var cardStatus in _cardStatuses)
             {
@@ -56,7 +53,6 @@ namespace CanvasImplementation.ViewModels
             }
 
             _cardStatuses.Clear();
-            _healthLabel.ValueChanged -= OnHealthValueChanged;
         }
 
         public void SetData(CardData data)
@@ -94,14 +90,9 @@ namespace CanvasImplementation.ViewModels
             SetStackPosition(cardTransform.Position);
         }
 
-        private void OnHealthValueChanged(object sender, int value)
-        {
-            HealthChanged?.Invoke(this, value);
-        }
-
         private void OnCardStatusValueChanged(object sender, int value)
         {
-            StatusValueChanged?.Invoke(this, value);
+            StatusValueChanged?.Invoke(this, sender as CardStatus);
         }
 
         private void SetStackAngle(float angle)

@@ -26,6 +26,7 @@ namespace Core
         {
             _gameLogic = new GameLogic(_cardStack);
             _gameLogic.AttackFinish += OnAttackFinish;
+            _cardStack.CardRemoved += OnCardStackRemoved;
             _cardLoader.CardDatasReady += OnCardDatasReady;
             _gameView.GameBoard.RandomAttack += OnRandomAttack;
         }
@@ -38,6 +39,11 @@ namespace Core
         private void OnDestroy()
         {
             _gameLogic.Dispose();
+            _gameLogic.AttackFinish -= OnAttackFinish;
+            _cardStack.CardRemoved -= OnCardStackRemoved;
+            _cardLoader.CardDatasReady -= OnCardDatasReady;
+            _gameView.GameBoard.RandomAttack -= OnRandomAttack;
+
             foreach (var disposable in _disposables)
             {
                 disposable.Dispose();
@@ -53,6 +59,7 @@ namespace Core
         {
             if (cardDatas == null || cardDatas.Count == 0)
             {
+                Debug.LogError("No cards found.");
                 yield break;
             }
 
@@ -63,32 +70,24 @@ namespace Core
             {
                 if (cardData.Image == null)
                 {
-                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
-                    {
-                        cardData.Image = texture;
-                        _disposables.Add(cardData);
-                    }, progressBar);
+                    yield return DownloadImage(cardData, progressBar);
                 }
 
                 progressBar.NextIteration();
-
-                var asyncOperation = _cardReference.InstantiateAsync();
-                asyncOperation.Completed += handle => { OnCardInstantiated(handle.Result, cardData); };
-
-                yield return asyncOperation;
+                yield return InstantiateCard(cardData);
             }
 
             _gameView.SplashScreen.Hide();
             _cardStack.RecalculateTransforms();
         }
 
-        private void OnCardInstantiated(GameObject cardObject, CardData data)
+        private IEnumerator DownloadImage(CardData cardData, IProgress<float> progress)
         {
-            var card = cardObject.GetComponent<ICard>();
-            card.SetData(data);
-            card.HealthChanged += OnCardHealthChanged;
-
-            _cardStack.AddCard(card, false);
+            yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
+            {
+                cardData.Image = texture;
+                _disposables.Add(cardData);
+            }, progress);
         }
 
         private string GetImageUrl()
@@ -96,23 +95,22 @@ namespace Core
             return $"https://picsum.photos/256/?random&t={Time.time}";
         }
 
-        private void OnCardHealthChanged(object sender, int value)
+        private IEnumerator InstantiateCard(CardData cardData)
         {
-            if (value >= 1)
-            {
-                return;
-            }
+            var asyncOperation = _cardReference.InstantiateAsync();
+            asyncOperation.Completed += handle => { OnCardInstantiated(handle.Result, cardData); };
 
-            var card = (ICard) sender;
-            _cardStack.RemoveCard(card);
-            _cardReference.ReleaseInstance(card.GameObject);
-
-            if (!_cardStack.HasCards)
-            {
-                _gameView.GameOverScreen.Show();
-            }
+            yield return asyncOperation;
         }
 
+        private void OnCardInstantiated(GameObject cardObject, CardData data)
+        {
+            var card = cardObject.GetComponent<ICard>();
+            card.SetData(data);
+
+            _cardStack.AddCard(card, false);
+        }
+        
         private void OnRandomAttack(object sender, EventArgs e)
         {
             _gameView.GameBoard.SetRandomAttackButtonActive(false);
@@ -122,6 +120,16 @@ namespace Core
         private void OnAttackFinish(object sender, EventArgs e)
         {
             _gameView.GameBoard.SetRandomAttackButtonActive(true);
+        }
+
+        private void OnCardStackRemoved(object sender, ICard card)
+        {
+            _cardReference.ReleaseInstance(card.GameObject);
+
+            if (!_cardStack.HasCards)
+            {
+                _gameView.GameOverScreen.Show();
+            }
         }
     }
 }

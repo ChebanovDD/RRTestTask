@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Core;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace CanvasImplementation.BaseElements
 {
-    public class AnimatedNumberLabel : MonoBehaviour
+    public class AnimatedNumberLabel : CardStatus
     {
         [SerializeField] private TMP_Text _tmpText;
 
@@ -23,29 +24,6 @@ namespace CanvasImplementation.BaseElements
         [SerializeField] private AssetReference _increaseAssetReference;
         [SerializeField] private AssetReference _decreaseAssetReference;
 
-        private int _value;
-        private int _displayValue;
-
-        public int Value
-        {
-            get => _value;
-            private set
-            {
-                if (!CanSet(value))
-                {
-                    return;
-                }
-
-                _value = value;
-                SetDisplayValue(value);
-                RaiseValueChanged(value);
-            }
-        }
-
-        public int MinValue { get; set; } = int.MinValue;
-
-        public event EventHandler<int> ValueChanged;
-
         private void Awake()
         {
             if (TryParse(_tmpText.text, out var value))
@@ -59,7 +37,7 @@ namespace CanvasImplementation.BaseElements
             }
         }
 
-        public bool SetValue(int value)
+        public override bool SetValue(int value)
         {
             if (!CanSet(value))
             {
@@ -84,11 +62,6 @@ namespace CanvasImplementation.BaseElements
             }
 
             return int.TryParse(text, out value);
-        }
-
-        private bool CanSet(int value)
-        {
-            return _value != value;
         }
 
         private IEnumerator AnimateValueChange(int newValue)
@@ -137,10 +110,10 @@ namespace CanvasImplementation.BaseElements
             return assetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform);
         }
         
-        private void SetDisplayValue(int value)
+        protected override void SetDisplayValue(int value)
         {
+            base.SetDisplayValue(value);
             _tmpText.text = value.ToString();
-            _displayValue = value;
         }
 
         private Sequence AnimateNumber(GameObject numberObject)
@@ -149,11 +122,6 @@ namespace CanvasImplementation.BaseElements
                 .Append(numberObject.transform.DOMoveY(numberObject.transform.position.y + _pathLength, _duration))
                 .Append(numberObject.transform.DOScale(0, _duration / 4))
                 .SetEase(_easeType);
-        }
-
-        private void RaiseValueChanged(int value)
-        {
-            ValueChanged?.Invoke(this, value);
         }
     }
 }

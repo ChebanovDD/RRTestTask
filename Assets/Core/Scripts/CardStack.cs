@@ -56,6 +56,11 @@ namespace Core
             return _cards[index];
         }
 
+        public int GetIndex(ICard card)
+        {
+            return _cards.IndexOf(card);
+        }
+
         public Sequence ActivateCard(int index, out ICard card)
         {
             card = GetCard(index);

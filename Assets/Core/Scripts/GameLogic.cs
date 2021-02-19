@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Core.Enums;
 using Core.Interfaces;
 using DG.Tweening;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core
@@ -10,6 +12,9 @@ namespace Core
     {
         private int _currentCardIndex;
         private readonly CardStack _cardStack;
+        
+        private delegate void StatusOperationDelegate(ICard card, CardStatus status);
+        private readonly Dictionary<CardStats, StatusOperationDelegate> _statusOperations;
 
         public event EventHandler AttackFinish;
 
@@ -18,6 +23,13 @@ namespace Core
             _cardStack = cardStack;
             _cardStack.CardAdded += OnCardAddedToStack;
             _cardStack.CardRemoved += OnCardRemovedFromStack;
+
+            _statusOperations = new Dictionary<CardStats, StatusOperationDelegate>
+            {
+                {CardStats.Mana, OnManaValueChanged },
+                {CardStats.Attack, OnAttackValueChanged },
+                {CardStats.Health, OnHealthValueChanged }
+            };
         }
 
         public void Dispose()
@@ -72,9 +84,53 @@ namespace Core
             RaiseAttackFinish();
         }
 
-        private void OnCardStatusValueChanged(object sender, int value)
+        private void OnCardStatusValueChanged(object sender, CardStatus cardStatus)
         {
-            RaiseAttackFinish();
+            if (cardStatus == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            if (_statusOperations.TryGetValue(cardStatus.Status, out var statusOperation))
+            {
+                statusOperation.Invoke(sender as ICard, cardStatus);
+                RaiseAttackFinish();
+            }
+            else
+            {
+                throw new ArgumentException($"Status operation '{cardStatus.Status}' not found.");
+            }
+        }
+
+        private void OnManaValueChanged(ICard card, CardStatus status)
+        {
+            Debug.Log($"Mana: {status.Value}");
+        }
+
+        private void OnAttackValueChanged(ICard card, CardStatus status)
+        {
+            Debug.Log($"Attack: {status.Value}");
+        }
+
+        private void OnHealthValueChanged(ICard card, CardStatus status)
+        {
+            if (card == null)
+            {
+                throw new NullReferenceException();
+            }
+
+            if (status.Value >= 1)
+            {
+                return;
+            }
+
+            _currentCardIndex = _cardStack.GetIndex(card);
+            if (_currentCardIndex == -1)
+            {
+                throw new InvalidOperationException("Card not found in stack.");
+            }
+
+            _cardStack.RemoveCard(card);
         }
 
         private void RaiseAttackFinish()
