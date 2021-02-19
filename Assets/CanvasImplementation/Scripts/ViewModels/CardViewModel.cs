@@ -20,6 +20,8 @@ namespace CanvasImplementation.ViewModels
         [SerializeField] private TMP_Text _nameLabel;
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
+        [SerializeField] private Image _outlineImage;
+        
 
         private List<CardStatus> _cardStatuses;
 
@@ -77,6 +79,11 @@ namespace CanvasImplementation.ViewModels
 
             var cardStatus = _cardStatuses[index];
             return cardStatus.SetValue(value >= cardStatus.MinValue ? value : cardStatus.MinValue);
+        }
+
+        public void SetActive(bool value)
+        {
+            _outlineImage.enabled = value;
         }
 
         public void SetParent(Transform parent)

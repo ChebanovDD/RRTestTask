@@ -64,6 +64,7 @@ namespace Core
         public Sequence ActivateCard(int index, out ICard card)
         {
             card = GetCard(index);
+            card.SetActive(true);
 
             _activeCardIndex = index;
             return _cardAnimator.ActivateCard(card);
@@ -76,7 +77,10 @@ namespace Core
                 throw new InvalidOperationException("No active card found.");
             }
 
-            _cardAnimator.DeactivateCard(_cards[_activeCardIndex]);
+            var card = _cards[_activeCardIndex];
+            card.SetActive(false);
+
+            _cardAnimator.DeactivateCard(card);
             _activeCardIndex = -1;
         }
 

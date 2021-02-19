@@ -260,6 +260,7 @@ MonoBehaviour:
   _nameLabel: {fileID: 8486257928826641406}
   _descriptionLabel: {fileID: 8486257929611775107}
   _image: {fileID: 7746166977014327878}
+  _outlineImage: {fileID: 7746166978441825146}
 --- !u!1 &7746166978383072941
 GameObject:
   m_ObjectHideFlags: 0

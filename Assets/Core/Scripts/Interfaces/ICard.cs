@@ -16,6 +16,7 @@ namespace Core.Interfaces
 
         void SetData(CardData data);
         bool SetStatusValue(int index, int value);
+        void SetActive(bool value);
         void SetParent(Transform parent);
         void SetTransform(CardTransform cardTransform);
     }
