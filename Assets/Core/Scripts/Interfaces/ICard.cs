@@ -8,13 +8,15 @@ namespace Core.Interfaces
     {
         int StatusCount { get; }
         GameObject GameObject { get; }
+        Vector3 StackPosition { get; }
+        Quaternion StackRotation { get; }
 
         event EventHandler<int> HealthChanged;
 
         void SetData(CardData data);
         void SetStatusValue(int index, int value);
-        void SetAngle(float angle);
-        void SetPosition(Vector3 position);
+        void SetStackAngle(float angle);
+        void SetStackPosition(Vector3 position);
         void SetParent(Transform parent);
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Random = UnityEngine.Random;
 
 namespace Core
@@ -24,12 +25,19 @@ namespace Core
                 _currentCardIndex = 0;
             }
 
-            var card = _cardStack.GetCard(_currentCardIndex);
-            var attackValue = Random.Range(-2, 9);
-            var parameterIndex = Random.Range(0, card.StatusCount);
+            if (_cardStack.HasActiveCard)
+            {
+                _cardStack.DeactivateCard();
+            }
 
-            card.SetStatusValue(parameterIndex, attackValue);
-            _currentCardIndex++;
+            _cardStack.ActivateCard(_currentCardIndex, out var card).OnComplete(() =>
+            {
+                var attackValue = Random.Range(-2, 9);
+                var parameterIndex = Random.Range(0, card.StatusCount);
+
+                card.SetStatusValue(parameterIndex, attackValue);
+                _currentCardIndex++;
+            });
         }
     }
 }

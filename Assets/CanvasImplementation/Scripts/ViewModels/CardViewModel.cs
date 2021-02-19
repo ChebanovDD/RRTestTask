@@ -23,6 +23,8 @@ namespace CanvasImplementation.ViewModels
 
         public int StatusCount => _cardStatuses.Count;
         public GameObject GameObject => gameObject;
+        public Vector3 StackPosition { get; private set; }
+        public Quaternion StackRotation { get; private set; }
 
         public event EventHandler<int> HealthChanged;
 
@@ -71,22 +73,24 @@ namespace CanvasImplementation.ViewModels
             }
         }
 
-        public void SetAngle(float angle)
+        public void SetStackAngle(float angle)
         {
             transform.rotation = Quaternion.identity;
             transform.Rotate(Vector3.back, angle);
+            StackRotation = transform.rotation;
         }
 
-        public void SetPosition(Vector3 position)
+        public void SetStackPosition(Vector3 position)
         {
             transform.position = position;
+            StackPosition = position;
         }
 
         public void SetParent(Transform parent)
         {
             transform.SetParent(parent, false);
         }
-
+        
         private void OnHealthValueChanged(object sender, int value)
         {
             HealthChanged?.Invoke(this, value);

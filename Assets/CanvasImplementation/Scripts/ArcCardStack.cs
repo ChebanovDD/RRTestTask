@@ -33,8 +33,8 @@ namespace CanvasImplementation
                 var x = Mathf.Sin(angle * Mathf.Deg2Rad) * _radius + _container.position.x;
                 var y = Mathf.Cos(angle * Mathf.Deg2Rad) * _radius + _container.position.y;
 
-                card.SetAngle(angle);
-                card.SetPosition(new Vector3(x, y - _radius + _bottomOffset));
+                card.SetStackAngle(angle);
+                card.SetStackPosition(new Vector3(x, y - _radius + _bottomOffset));
 
                 angle += _spacing;
             }
