@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using CanvasImplementation.BaseElements;
 using Core.Extensions;
 using Core.Interfaces;
@@ -17,6 +19,32 @@ namespace CanvasImplementation.ViewModels
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
 
+        private List<AnimatedNumberLabel> _cardParameters;
+
+        public int CardParametersCount => _cardParameters.Count;
+        public GameObject GameObject => gameObject;
+
+        public event EventHandler<int> HealthChanged;
+
+        private void Awake()
+        {
+            _healthLabel.MinValue = 0;
+            _cardParameters = new List<AnimatedNumberLabel>
+            {
+                _manaLabel,
+                _attackLabel,
+                _healthLabel
+            };
+
+            _healthLabel.ValueChanged += OnHealthValueChanged;
+        }
+        
+        private void OnDestroy()
+        {
+            _cardParameters.Clear();
+            _healthLabel.ValueChanged -= OnHealthValueChanged;
+        }
+
         public void SetData(CardData data)
         {
             _manaLabel.SetValueWithoutAnimation(data.Mana);
@@ -29,10 +57,18 @@ namespace CanvasImplementation.ViewModels
             _image.texture = data.Image;
             _image.FillParent();
         }
-        
-        public void SetMana(int value)
+
+        public void SetParameterValue(int index, int value)
         {
-            _manaLabel.SetValue(value);
+            if (index >= 0 && index < _cardParameters.Count)
+            {
+                var parameter = _cardParameters[index];
+                parameter.SetValue(value >= parameter.MinValue ? value : parameter.MinValue);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException();
+            }
         }
 
         public void SetAngle(float angle)
@@ -49,6 +85,11 @@ namespace CanvasImplementation.ViewModels
         public void SetParent(Transform parent)
         {
             transform.SetParent(parent, false);
+        }
+
+        private void OnHealthValueChanged(object sender, int value)
+        {
+            HealthChanged?.Invoke(this, value);
         }
     }
 }

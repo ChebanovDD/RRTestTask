@@ -12,6 +12,7 @@ namespace Core
         protected readonly List<ICard> _cards = new List<ICard>();
 
         public int Count => _cards.Count;
+        public bool HasCards => _cards.Count > 0;
 
         public void AddCard(ICard card)
         {
@@ -39,6 +40,12 @@ namespace Core
             }
 
             throw new IndexOutOfRangeException();
+        }
+
+        public void RemoveCard(ICard card)
+        {
+            _cards.Remove(card);
+            RecalculateTransforms();
         }
 
         public abstract void RecalculateTransforms();

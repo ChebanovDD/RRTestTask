@@ -13,24 +13,37 @@ namespace Core
         [SerializeField] private AssetLabelReference _cardsLabelReference;
         [SerializeField] private CardStack _cardStack;
 
+        private int _currentCardIndex;
         private readonly CardLoader _cardLoader = new CardLoader();
 
-        public void Awake()
+        private void Awake()
         {
             _cardLoader.CardDatasReady += OnCardDatasReady;
         }
 
-        public void Start()
+        private void Start()
         {
             _cardLoader.LoadCards(_cardsLabelReference.labelString);
         }
 
-        public void DecreaseCardMana()
+        public void RandomAttack()
         {
-            var cardIndex = Random.Range(0, _cardStack.Count - 1);
-            var manaValue = Random.Range(-2, 9);
+            if (!_cardStack.HasCards)
+            {
+                return;
+            }
 
-            _cardStack.GetCard(cardIndex).SetMana(manaValue);
+            if (_currentCardIndex >= _cardStack.Count)
+            {
+                _currentCardIndex = 0;
+            }
+
+            var card = _cardStack.GetCard(_currentCardIndex);
+            var attackValue = Random.Range(-2, 9);
+            var parameterIndex = Random.Range(0, card.CardParametersCount);
+
+            card.SetParameterValue(parameterIndex, attackValue);
+            _currentCardIndex++;
         }
 
         private void OnCardDatasReady(object sender, IReadOnlyCollection<CardData> cardDatas)
@@ -46,9 +59,23 @@ namespace Core
                 {
                     var card = handle.Result.GetComponent<ICard>();
                     card.SetData(cardData);
+                    card.HealthChanged += OnCardHealthChanged;
+
                     _cardStack.AddCard(card);
                 };
             }
+        }
+
+        private void OnCardHealthChanged(object sender, int value)
+        {
+            if (value >= 1)
+            {
+                return;
+            }
+
+            var card = (ICard) sender;
+            _cardStack.RemoveCard(card);
+            _cardReference.ReleaseInstance(card.GameObject);
         }
     }
 }
