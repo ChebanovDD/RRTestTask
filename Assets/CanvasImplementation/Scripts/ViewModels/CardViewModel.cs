@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CanvasImplementation.BaseElements;
 using Core.Extensions;
 using Core.Interfaces;
+using Core.Models;
 using Core.ScriptableObjects;
 using TMPro;
 using UnityEngine;
@@ -82,7 +83,28 @@ namespace CanvasImplementation.ViewModels
             return cardStatus.SetValue(value >= cardStatus.MinValue ? value : cardStatus.MinValue);
         }
 
-        public void SetStackAngle(float angle)
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent, false);
+        }
+
+        public void SetTransform(CardTransform cardTransform)
+        {
+            SetStackAngle(cardTransform.Angle);
+            SetStackPosition(cardTransform.Position);
+        }
+
+        private void OnHealthValueChanged(object sender, int value)
+        {
+            HealthChanged?.Invoke(this, value);
+        }
+
+        private void OnCardStatusValueChanged(object sender, int value)
+        {
+            StatusValueChanged?.Invoke(this, value);
+        }
+
+        private void SetStackAngle(float angle)
         {
             transform.rotation = Quaternion.identity;
             transform.Rotate(Vector3.back, angle);
@@ -93,21 +115,6 @@ namespace CanvasImplementation.ViewModels
         {
             transform.position = position;
             StackPosition = position;
-        }
-
-        public void SetParent(Transform parent)
-        {
-            transform.SetParent(parent, false);
-        }
-        
-        private void OnHealthValueChanged(object sender, int value)
-        {
-            HealthChanged?.Invoke(this, value);
-        }
-
-        private void OnCardStatusValueChanged(object sender, int value)
-        {
-            StatusValueChanged?.Invoke(this, value);
         }
     }
 }

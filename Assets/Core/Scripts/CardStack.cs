@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core.Interfaces;
+using Core.Models;
 using DG.Tweening;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Core
         [SerializeField] protected CardAnimator _cardAnimator;
 
         private int _activeCardIndex = -1;
-        protected readonly List<ICard> _cards = new List<ICard>();
+        private readonly List<ICard> _cards = new List<ICard>();
 
         public int Count => _cards.Count;
         public bool HasCards => _cards.Count > 0;
@@ -37,7 +38,6 @@ namespace Core
 
             _cards.Add(card);
             RecalculateTransforms();
-
             CardAdded?.Invoke(this, card);
         }
 
@@ -76,10 +76,23 @@ namespace Core
             _activeCardIndex = -1;
 
             RecalculateTransforms();
-
             CardRemoved?.Invoke(this, card);
         }
 
-        public abstract void RecalculateTransforms();
+        public void RecalculateTransforms()
+        {
+            if (_cards.Count == 0)
+            {
+                return;
+            }
+
+            var cardTransforms = CalculateCardTransforms(_cards.Count);
+            for (var i = 0; i < _cards.Count; i++)
+            {
+                _cardAnimator.SetCardTransform(_cards[i], cardTransforms[i]);
+            }
+        }
+
+        protected abstract CardTransform[] CalculateCardTransforms(int cardsCount);
     }
 }

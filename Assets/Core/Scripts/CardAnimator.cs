@@ -1,4 +1,5 @@
 using Core.Interfaces;
+using Core.Models;
 using DG.Tweening;
 using UnityEngine;
 
@@ -28,6 +29,17 @@ namespace Core
                 .Join(card.GameObject.transform.DOMoveY(card.StackPosition.y, _deactivateDuration))
                 .Join(card.GameObject.transform.DORotateQuaternion(card.StackRotation, _deactivateDuration))
                 .SetEase(_deactivateEaseType);
+        }
+
+        public Sequence SetCardTransform(ICard card, CardTransform cardTransform)
+        {
+            return DOTween.Sequence()
+                .Join(card.GameObject.transform.DOMove(cardTransform.Position, _deactivateDuration))
+                .Join(card.GameObject.transform.DORotate(new Vector3(0, 0, -cardTransform.Angle), _deactivateDuration))
+                .SetEase(_deactivateEaseType).OnComplete(() =>
+                {
+                    card.SetTransform(cardTransform);
+                });
         }
     }
 }

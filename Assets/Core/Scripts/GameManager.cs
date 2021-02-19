@@ -61,14 +61,14 @@ namespace Core
 
             foreach (var cardData in cardDatas)
             {
-                if (cardData.Image == null)
-                {
-                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
-                    {
-                        cardData.Image = texture;
-                        _disposables.Add(cardData);
-                    }, progressBar);
-                }
+                //if (cardData.Image == null)
+                //{
+                //    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
+                //    {
+                //        cardData.Image = texture;
+                //        _disposables.Add(cardData);
+                //    }, progressBar);
+                //}
 
                 progressBar.NextIteration();
 

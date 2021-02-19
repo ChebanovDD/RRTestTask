@@ -1,4 +1,5 @@
 using System;
+using Core.Models;
 using Core.ScriptableObjects;
 using UnityEngine;
 
@@ -16,8 +17,7 @@ namespace Core.Interfaces
 
         void SetData(CardData data);
         bool SetStatusValue(int index, int value);
-        void SetStackAngle(float angle);
-        void SetStackPosition(Vector3 position);
         void SetParent(Transform parent);
+        void SetTransform(CardTransform cardTransform);
     }
 }

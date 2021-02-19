@@ -1,4 +1,5 @@
 using Core;
+using Core.Models;
 using UnityEngine;
 
 namespace CanvasImplementation
@@ -17,27 +18,23 @@ namespace CanvasImplementation
             NormalizeValues();
         }
 
-        public override void RecalculateTransforms()
+        protected override CardTransform[] CalculateCardTransforms(int cardsCount)
         {
-            if (_cards.Count == 0)
-            {
-                return;
-            }
+            var isEven = cardsCount % 2 == 0;
+            var angle = isEven ? -_spacing / 2 * (cardsCount - 1) : -_spacing * ((cardsCount - 1) / 2.0f);
 
-            var count = _cards.Count;
-            var isEven = count % 2 == 0;
-            var angle = isEven ? -_spacing / 2 * (count - 1) : -_spacing * ((count - 1) / 2.0f);
-
-            foreach (var card in _cards)
+            var result = new CardTransform[cardsCount];
+            for (var i = 0; i < cardsCount; i++)
             {
                 var x = Mathf.Sin(angle * Mathf.Deg2Rad) * _radius + _container.position.x;
                 var y = Mathf.Cos(angle * Mathf.Deg2Rad) * _radius + _container.position.y;
 
-                card.SetStackAngle(angle);
-                card.SetStackPosition(new Vector3(x, y - _radius + _bottomOffset));
+                result[i] = new CardTransform(angle, new Vector3(x, y - _radius + _bottomOffset));
 
                 angle += _spacing;
             }
+
+            return result;
         }
 
         private void NormalizeValues()
