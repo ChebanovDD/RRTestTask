@@ -19,9 +19,9 @@ namespace CanvasImplementation.ViewModels
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
 
-        private List<AnimatedNumberLabel> _cardParameters;
+        private List<AnimatedNumberLabel> _cardStatuses;
 
-        public int CardParametersCount => _cardParameters.Count;
+        public int StatusCount => _cardStatuses.Count;
         public GameObject GameObject => gameObject;
 
         public event EventHandler<int> HealthChanged;
@@ -29,7 +29,7 @@ namespace CanvasImplementation.ViewModels
         private void Awake()
         {
             _healthLabel.MinValue = 0;
-            _cardParameters = new List<AnimatedNumberLabel>
+            _cardStatuses = new List<AnimatedNumberLabel>
             {
                 _manaLabel,
                 _attackLabel,
@@ -41,7 +41,7 @@ namespace CanvasImplementation.ViewModels
         
         private void OnDestroy()
         {
-            _cardParameters.Clear();
+            _cardStatuses.Clear();
             _healthLabel.ValueChanged -= OnHealthValueChanged;
         }
 
@@ -58,12 +58,12 @@ namespace CanvasImplementation.ViewModels
             _image.FillParent();
         }
 
-        public void SetParameterValue(int index, int value)
+        public void SetStatusValue(int index, int value)
         {
-            if (index >= 0 && index < _cardParameters.Count)
+            if (index >= 0 && index < _cardStatuses.Count)
             {
-                var parameter = _cardParameters[index];
-                parameter.SetValue(value >= parameter.MinValue ? value : parameter.MinValue);
+                var cardStatus = _cardStatuses[index];
+                cardStatus.SetValue(value >= cardStatus.MinValue ? value : cardStatus.MinValue);
             }
             else
             {

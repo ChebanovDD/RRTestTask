@@ -52,9 +52,9 @@ namespace Core
 
             var card = _cardStack.GetCard(_currentCardIndex);
             var attackValue = Random.Range(-2, 9);
-            var parameterIndex = Random.Range(0, card.CardParametersCount);
+            var parameterIndex = Random.Range(0, card.StatusCount);
 
-            card.SetParameterValue(parameterIndex, attackValue);
+            card.SetStatusValue(parameterIndex, attackValue);
             _currentCardIndex++;
         }
 
