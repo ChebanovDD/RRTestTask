@@ -22,7 +22,7 @@ namespace Core
         public event EventHandler<ICard> CardAdded;
         public event EventHandler<ICard> CardRemoved;
 
-        public void AddCard(ICard card)
+        public void AddCard(ICard card, bool recalculateTransforms = true)
         {
             if (card == null)
             {
@@ -37,7 +37,12 @@ namespace Core
             card.SetParent(_container.transform);
 
             _cards.Add(card);
-            RecalculateTransforms();
+
+            if (recalculateTransforms)
+            {
+                RecalculateTransforms();
+            }
+
             CardAdded?.Invoke(this, card);
         }
 

@@ -16,6 +16,8 @@ namespace CanvasImplementation
         public void Awake()
         {
             NormalizeValues();
+
+            // TODO: Normalize values when screen size changed.
         }
 
         protected override CardTransform[] CalculateCardTransforms(int cardsCount)

@@ -61,14 +61,14 @@ namespace Core
 
             foreach (var cardData in cardDatas)
             {
-                //if (cardData.Image == null)
-                //{
-                //    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
-                //    {
-                //        cardData.Image = texture;
-                //        _disposables.Add(cardData);
-                //    }, progressBar);
-                //}
+                if (cardData.Image == null)
+                {
+                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
+                    {
+                        cardData.Image = texture;
+                        _disposables.Add(cardData);
+                    }, progressBar);
+                }
 
                 progressBar.NextIteration();
 
@@ -79,6 +79,7 @@ namespace Core
             }
 
             _gameView.SplashScreen.Hide();
+            _cardStack.RecalculateTransforms();
         }
 
         private void OnCardInstantiated(GameObject cardObject, CardData data)
@@ -87,7 +88,7 @@ namespace Core
             card.SetData(data);
             card.HealthChanged += OnCardHealthChanged;
 
-            _cardStack.AddCard(card);
+            _cardStack.AddCard(card, false);
         }
 
         private string GetImageUrl()
@@ -108,7 +109,7 @@ namespace Core
 
             if (!_cardStack.HasCards)
             {
-                //_gameView.GameOverScreen.Show();
+                _gameView.GameOverScreen.Show();
             }
         }
 
