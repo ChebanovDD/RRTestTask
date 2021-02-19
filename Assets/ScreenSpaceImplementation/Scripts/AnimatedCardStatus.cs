@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace CanvasImplementation
+namespace ScreenSpaceImplementation.Scripts
 {
     public class AnimatedCardStatus : CardStatus
     {

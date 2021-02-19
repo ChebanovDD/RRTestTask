@@ -2,7 +2,7 @@ using Core;
 using Core.Models;
 using UnityEngine;
 
-namespace CanvasImplementation
+namespace ScreenSpaceImplementation.Scripts
 {
     public class ArcCardStack : CardStack
     {
@@ -13,7 +13,7 @@ namespace CanvasImplementation
         [SerializeField] private float _radius = 650;
         [SerializeField] private float _bottomOffset = 100;
 
-        public void Awake()
+        private void Awake()
         {
             NormalizeValues();
 

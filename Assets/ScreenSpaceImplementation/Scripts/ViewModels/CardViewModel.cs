@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CanvasImplementation.ViewModels
+namespace ScreenSpaceImplementation.Scripts.ViewModels
 {
     public class CardViewModel : MonoBehaviour, ICard
     {
@@ -21,7 +21,6 @@ namespace CanvasImplementation.ViewModels
         [SerializeField] private RawImage _image;
         [SerializeField] private Image _outlineImage;
         
-
         private List<CardStatus> _cardStatuses;
 
         public int StatusCount => _cardStatuses.Count;
