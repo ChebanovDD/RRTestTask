@@ -6,11 +6,11 @@ namespace CanvasImplementation
     public class ArcCardStack : CardStack
     {
         [Space]
-        [Range(0, 50)] 
-        [SerializeField] private float _spacing = 10;
-        [Range(100, 1000)] 
-        [SerializeField] private float _radius = 800;
-        [SerializeField] private float _verticalOffset;
+        [Range(0.1f, 50)]
+        [SerializeField] private float _spacing = 5;
+        [Range(100, 2000)]
+        [SerializeField] private float _radius = 650;
+        [SerializeField] private float _bottomOffset = 100;
 
         public void Awake()
         {
@@ -34,7 +34,7 @@ namespace CanvasImplementation
                 var y = Mathf.Cos(angle * Mathf.Deg2Rad) * _radius + _container.position.y;
 
                 card.SetAngle(angle);
-                card.SetPosition(new Vector3(x, y - _radius + _verticalOffset));
+                card.SetPosition(new Vector3(x, y - _radius + _bottomOffset));
 
                 angle += _spacing;
             }
@@ -42,12 +42,16 @@ namespace CanvasImplementation
 
         private void NormalizeValues()
         {
-            var worldRect = GetWorldRect(_container.GetComponent<RectTransform>());
+            var containerRect = _container.GetComponent<RectTransform>();
+            containerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _radius);
+            containerRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _bottomOffset);
+
+            var worldRect = GetWorldRect(containerRect);
             var containerScale = _container.lossyScale.x;
 
             _radius = worldRect.width * 2 / containerScale;
             _spacing = _spacing * containerScale;
-            _verticalOffset = worldRect.height / 2;
+            _bottomOffset = worldRect.height;
         }
 
         private Rect GetWorldRect(RectTransform rectTransform, float reduceBorders = 0)
