@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace CanvasImplementation.BaseElements
 {
@@ -12,8 +13,9 @@ namespace CanvasImplementation.BaseElements
         [SerializeField] private TMP_Text _tmpText;
 
         [Header("Animation")]
-        [SerializeField] private float _delay;
-        [SerializeField] private float _duration;
+        [SerializeField] private float _delay = 0.2f;
+        [SerializeField] private float _duration = 0.4f;
+        [SerializeField] private float _pathLength = 250;
         [SerializeField] private Ease _easeType;
         [SerializeField] private Transform _spawnPoint;
 
@@ -22,16 +24,34 @@ namespace CanvasImplementation.BaseElements
         [SerializeField] private AssetReference _decreaseAssetReference;
 
         private int _value;
-        private int _previousValue;
+        private int _displayValue;
 
-        public int Value => _value;
+        public int Value
+        {
+            get => _value;
+            private set
+            {
+                if (!CanSet(value))
+                {
+                    return;
+                }
+
+                _value = value;
+                SetDisplayValue(value);
+                RaiseValueChanged(value);
+            }
+        }
+
+        public int MinValue { get; set; } = int.MinValue;
+
+        public event EventHandler<int> ValueChanged;
 
         private void Awake()
         {
             if (TryParse(_tmpText.text, out var value))
             {
                 _value = value;
-                _previousValue = value;
+                _displayValue = value;
             }
             else
             {
@@ -41,19 +61,15 @@ namespace CanvasImplementation.BaseElements
 
         public void SetValue(int value)
         {
-            if (_value == value)
+            if (CanSet(value))
             {
-                return;
+                StartCoroutine(AnimateValueChange(value));
             }
-
-            SetValueWithoutAnimation(value);
-            StartCoroutine(AnimateValueChange(value));
         }
 
         public void SetValueWithoutAnimation(int value)
         {
-            _value = value;
-            _tmpText.text = value.ToString();
+            Value = value;
         }
 
         private bool TryParse(string text, out int value)
@@ -67,49 +83,74 @@ namespace CanvasImplementation.BaseElements
             return int.TryParse(text, out value);
         }
 
+        private bool CanSet(int value)
+        {
+            return _value != value;
+        }
+
         private IEnumerator AnimateValueChange(int newValue)
         {
-            var spritesCount = Mathf.Abs(_previousValue - newValue);
-            var isDecreaseMode = _previousValue > newValue;
+            var spritesCount = Mathf.Abs(_value - newValue);
+            var isDecreaseMode = _value > newValue;
+            var spritesCounter = 0;
 
             for (var i = 0; i < spritesCount; i++)
             {
                 if (isDecreaseMode)
                 {
-                    _decreaseAssetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform)
-                        .Completed += handle =>
-                    {
-                        UpdateValue(_previousValue - 1);
-                        AnimateNumber(handle.Result);
-                    };
+                    AnimateNumber(_decreaseAssetReference, _displayValue - 1, () => spritesCounter++);
                 }
                 else
                 {
-                    _increaseAssetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform)
-                        .Completed += handle =>
-                    {
-                        UpdateValue(_previousValue + 1);
-                        AnimateNumber(handle.Result);
-                    };
+                    AnimateNumber(_increaseAssetReference, _displayValue + 1, () => spritesCounter++);
                 }
 
                 yield return new WaitForSeconds(_delay);
             }
+
+            while (spritesCounter != spritesCount)
+            {
+                yield return null;
+            }
+
+            Value = newValue;
         }
 
-        private void UpdateValue(int value)
+        private void AnimateNumber(AssetReference assetReference, int newValue, Action onComplete)
+        {
+            InstantiateNumberAsync(assetReference).Completed += handle =>
+            {
+                SetDisplayValue(newValue);
+                AnimateNumber(handle.Result).OnComplete(() =>
+                {
+                    assetReference.ReleaseInstance(handle.Result);
+                    onComplete?.Invoke();
+                });
+            };
+        }
+
+        private AsyncOperationHandle<GameObject> InstantiateNumberAsync(AssetReference assetReference)
+        {
+            return assetReference.InstantiateAsync(_spawnPoint.position, Quaternion.identity, transform);
+        }
+        
+        private void SetDisplayValue(int value)
         {
             _tmpText.text = value.ToString();
-            _previousValue = value;
+            _displayValue = value;
         }
 
-        private void AnimateNumber(GameObject numberObject)
+        private Sequence AnimateNumber(GameObject numberObject)
         {
-            DOTween.Sequence()
-                .Append(numberObject.transform.DOMoveY(numberObject.transform.position.y + 250, _duration))
+            return DOTween.Sequence()
+                .Append(numberObject.transform.DOMoveY(numberObject.transform.position.y + _pathLength, _duration))
                 .Append(numberObject.transform.DOScale(0, _duration / 4))
-                .SetEase(_easeType)
-                .OnComplete(() => { Destroy(numberObject); });
+                .SetEase(_easeType);
+        }
+
+        private void RaiseValueChanged(int value)
+        {
+            ValueChanged?.Invoke(this, value);
         }
     }
 }
