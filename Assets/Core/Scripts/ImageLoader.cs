@@ -11,7 +11,13 @@ namespace Core
         {
             using var www = UnityWebRequestTexture.GetTexture(url);
 
-            yield return www.SendWebRequest();
+            var asyncOperation = www.SendWebRequest();
+
+            while (!asyncOperation.isDone)
+            {
+                progress?.Report(asyncOperation.progress);
+                yield return null;
+            }
 
             if (www.result != UnityWebRequest.Result.Success)
             {
