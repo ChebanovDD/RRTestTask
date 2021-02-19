@@ -7,9 +7,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace CanvasImplementation.BaseElements
+namespace CanvasImplementation
 {
-    public class AnimatedNumberLabel : CardStatus
+    public class AnimatedCardStatus : CardStatus
     {
         [SerializeField] private TMP_Text _tmpText;
 

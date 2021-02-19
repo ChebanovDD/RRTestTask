@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CanvasImplementation.BaseElements;
 using Core;
 using Core.Extensions;
 using Core.Interfaces;
@@ -14,9 +13,9 @@ namespace CanvasImplementation.ViewModels
 {
     public class CardViewModel : MonoBehaviour, ICard
     {
-        [SerializeField] private AnimatedNumberLabel _manaLabel;
-        [SerializeField] private AnimatedNumberLabel _attackLabel;
-        [SerializeField] private AnimatedNumberLabel _healthLabel;
+        [SerializeField] private AnimatedCardStatus _manaLabel;
+        [SerializeField] private AnimatedCardStatus _attackLabel;
+        [SerializeField] private AnimatedCardStatus _healthLabel;
         [SerializeField] private TMP_Text _nameLabel;
         [SerializeField] private TMP_Text _descriptionLabel;
         [SerializeField] private RawImage _image;
