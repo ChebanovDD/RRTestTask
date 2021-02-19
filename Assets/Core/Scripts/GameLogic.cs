@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Core.Interfaces;
 using Core.ScriptableObjects;
@@ -15,6 +16,7 @@ namespace Core
 
         private int _currentCardIndex;
         private readonly CardLoader _cardLoader = new CardLoader();
+        private readonly ImageLoader _imageLoader = new ImageLoader();
 
         private void Awake()
         {
@@ -48,11 +50,16 @@ namespace Core
 
         private void OnCardDatasReady(object sender, IReadOnlyCollection<CardData> cardDatas)
         {
+            StartCoroutine(InstantiateCards(cardDatas));
+        }
+
+        private IEnumerator InstantiateCards(IReadOnlyCollection<CardData> cardDatas)
+        {
             foreach (var cardData in cardDatas)
             {
                 if (cardData.Image == null)
                 {
-                    // Download image.
+                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture => { cardData.Image = texture; });
                 }
 
                 _cardReference.InstantiateAsync().Completed += handle =>
@@ -63,7 +70,14 @@ namespace Core
 
                     _cardStack.AddCard(card);
                 };
+
+                yield return null;
             }
+        }
+
+        private string GetImageUrl()
+        {
+            return $"https://picsum.photos/256/?random&t={Time.time}";
         }
 
         private void OnCardHealthChanged(object sender, int value)
