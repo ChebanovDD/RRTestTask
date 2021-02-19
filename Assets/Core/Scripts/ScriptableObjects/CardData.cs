@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace Core.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "NewCardData", menuName = "Card Data")]
-    public class CardData : ScriptableObject
+    public class CardData : ScriptableObject, IDisposable
     {
         [Range(0, 9)] public int Mana;
         [Range(0, 9)] public int Attack;
@@ -13,5 +14,10 @@ namespace Core.ScriptableObjects
         [TextArea] public string Description;
 
         public Texture Image;
+
+        public void Dispose()
+        {
+            Image = null;
+        }
     }
 }

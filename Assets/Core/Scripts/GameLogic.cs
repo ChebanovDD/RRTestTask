@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Interfaces;
@@ -17,6 +18,7 @@ namespace Core
         private int _currentCardIndex;
         private readonly CardLoader _cardLoader = new CardLoader();
         private readonly ImageLoader _imageLoader = new ImageLoader();
+        private readonly List<IDisposable> _disposables = new List<IDisposable>();
 
         private void Awake()
         {
@@ -26,6 +28,14 @@ namespace Core
         private void Start()
         {
             _cardLoader.LoadCards(_cardsLabelReference.labelString);
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var disposable in _disposables)
+            {
+                disposable.Dispose();
+            }
         }
 
         public void RandomAttack()
@@ -59,7 +69,11 @@ namespace Core
             {
                 if (cardData.Image == null)
                 {
-                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture => { cardData.Image = texture; });
+                    yield return _imageLoader.DownloadImage(GetImageUrl(), texture =>
+                    {
+                        cardData.Image = texture;
+                        _disposables.Add(cardData);
+                    });
                 }
 
                 _cardReference.InstantiateAsync().Completed += handle =>
