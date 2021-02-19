@@ -12,9 +12,10 @@ namespace Core.Interfaces
         Quaternion StackRotation { get; }
 
         event EventHandler<int> HealthChanged;
+        event EventHandler<int> StatusValueChanged;
 
         void SetData(CardData data);
-        void SetStatusValue(int index, int value);
+        bool SetStatusValue(int index, int value);
         void SetStackAngle(float angle);
         void SetStackPosition(Vector3 position);
         void SetParent(Transform parent);

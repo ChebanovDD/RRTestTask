@@ -872,6 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 881340e9a421c0c479b77eb15abe95d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _randomAttackButton: {fileID: 1293909869}
 --- !u!224 &1925399973
 RectTransform:
   m_ObjectHideFlags: 0

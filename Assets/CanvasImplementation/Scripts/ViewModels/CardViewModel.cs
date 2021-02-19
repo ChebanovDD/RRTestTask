@@ -27,10 +27,10 @@ namespace CanvasImplementation.ViewModels
         public Quaternion StackRotation { get; private set; }
 
         public event EventHandler<int> HealthChanged;
+        public event EventHandler<int> StatusValueChanged;
 
         private void Awake()
         {
-            _healthLabel.MinValue = 0;
             _cardStatuses = new List<AnimatedNumberLabel>
             {
                 _manaLabel,
@@ -38,11 +38,22 @@ namespace CanvasImplementation.ViewModels
                 _healthLabel
             };
 
+            _healthLabel.MinValue = 0;
             _healthLabel.ValueChanged += OnHealthValueChanged;
+
+            foreach (var cardStatus in _cardStatuses)
+            {
+                cardStatus.ValueChanged += OnCardStatusValueChanged;
+            }
         }
-        
+
         private void OnDestroy()
         {
+            foreach (var cardStatus in _cardStatuses)
+            {
+                cardStatus.ValueChanged -= OnCardStatusValueChanged;
+            }
+
             _cardStatuses.Clear();
             _healthLabel.ValueChanged -= OnHealthValueChanged;
         }
@@ -60,17 +71,15 @@ namespace CanvasImplementation.ViewModels
             _image.FillParent();
         }
 
-        public void SetStatusValue(int index, int value)
+        public bool SetStatusValue(int index, int value)
         {
-            if (index >= 0 && index < _cardStatuses.Count)
-            {
-                var cardStatus = _cardStatuses[index];
-                cardStatus.SetValue(value >= cardStatus.MinValue ? value : cardStatus.MinValue);
-            }
-            else
+            if (index < 0 || index >= _cardStatuses.Count)
             {
                 throw new IndexOutOfRangeException();
             }
+
+            var cardStatus = _cardStatuses[index];
+            return cardStatus.SetValue(value >= cardStatus.MinValue ? value : cardStatus.MinValue);
         }
 
         public void SetStackAngle(float angle)
@@ -94,6 +103,11 @@ namespace CanvasImplementation.ViewModels
         private void OnHealthValueChanged(object sender, int value)
         {
             HealthChanged?.Invoke(this, value);
+        }
+
+        private void OnCardStatusValueChanged(object sender, int value)
+        {
+            StatusValueChanged?.Invoke(this, value);
         }
     }
 }

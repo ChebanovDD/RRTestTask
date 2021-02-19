@@ -59,12 +59,15 @@ namespace CanvasImplementation.BaseElements
             }
         }
 
-        public void SetValue(int value)
+        public bool SetValue(int value)
         {
-            if (CanSet(value))
+            if (!CanSet(value))
             {
-                StartCoroutine(AnimateValueChange(value));
+                return false;
             }
+            
+            StartCoroutine(AnimateValueChange(value));
+            return true;
         }
 
         public void SetValueWithoutAnimation(int value)

@@ -9,7 +9,7 @@ namespace Core
     public abstract class CardStack : MonoBehaviour
     {
         [SerializeField] protected Transform _container;
-        [SerializeField] private CardAnimator _cardAnimator;
+        [SerializeField] protected CardAnimator _cardAnimator;
 
         private int _activeCardIndex = -1;
         protected readonly List<ICard> _cards = new List<ICard>();
@@ -17,7 +17,10 @@ namespace Core
         public int Count => _cards.Count;
         public bool HasCards => _cards.Count > 0;
         public bool HasActiveCard => _activeCardIndex >= 0;
-        
+
+        public event EventHandler<ICard> CardAdded;
+        public event EventHandler<ICard> CardRemoved;
+
         public void AddCard(ICard card)
         {
             if (card == null)
@@ -34,16 +37,18 @@ namespace Core
 
             _cards.Add(card);
             RecalculateTransforms();
+
+            CardAdded?.Invoke(this, card);
         }
 
         public ICard GetCard(int index)
         {
-            if (index >= 0 && index < _cards.Count)
+            if (index < 0 || index >= _cards.Count)
             {
-                return _cards[index];
+                throw new IndexOutOfRangeException();
             }
 
-            throw new IndexOutOfRangeException();
+            return _cards[index];
         }
 
         public Sequence ActivateCard(int index, out ICard card)
@@ -71,6 +76,8 @@ namespace Core
             _activeCardIndex = -1;
 
             RecalculateTransforms();
+
+            CardRemoved?.Invoke(this, card);
         }
 
         public abstract void RecalculateTransforms();
