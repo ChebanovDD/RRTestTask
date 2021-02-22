@@ -9,22 +9,23 @@ namespace Core
     {
         public IEnumerator DownloadImage(string url, Action<Texture> callback, IProgress<float> progress = null)
         {
-            using var www = UnityWebRequestTexture.GetTexture(url);
-
-            var asyncOperation = www.SendWebRequest();
-
-            while (!asyncOperation.isDone)
+            using (var www = UnityWebRequestTexture.GetTexture(url))
             {
-                progress?.Report(asyncOperation.progress);
-                yield return null;
-            }
+                var asyncOperation = www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                yield break;
-            }
+                while (!asyncOperation.isDone)
+                {
+                    progress?.Report(asyncOperation.progress);
+                    yield return null;
+                }
 
-            callback.Invoke(DownloadHandlerTexture.GetContent(www));
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    yield break;
+                }
+
+                callback.Invoke(DownloadHandlerTexture.GetContent(www));
+            }
         }
-	}
+    }
 }
